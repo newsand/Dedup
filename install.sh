@@ -38,6 +38,14 @@ die() {
   exit 1
 }
 
+need_arg() {
+  local flag="$1"
+  local value="${2:-}"
+  if [[ -z "$value" ]]; then
+    die "missing value for $flag (use --help)"
+  fi
+}
+
 need_cmd() {
   command -v "$1" >/dev/null 2>&1 || die "missing dependency: $1"
 }
@@ -67,12 +75,12 @@ VERSION=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY_RUN=1; shift ;;
-    --prefix) PREFIX="${2:-}"; shift 2 ;;
-    --bin-dir) BIN_DIR="${2:-}"; shift 2 ;;
-    --local) LOCAL_BIN="${2:-}"; shift 2 ;;
-    --repo) REPO="${2:-}"; shift 2 ;;
-    --tag) TAG="${2:-}"; shift 2 ;;
-    --version) VERSION="${2:-}"; shift 2 ;;
+    --prefix) need_arg "$1" "${2:-}"; PREFIX="$2"; shift 2 ;;
+    --bin-dir) need_arg "$1" "${2:-}"; BIN_DIR="$2"; shift 2 ;;
+    --local) need_arg "$1" "${2:-}"; LOCAL_BIN="$2"; shift 2 ;;
+    --repo) need_arg "$1" "${2:-}"; REPO="$2"; shift 2 ;;
+    --tag) need_arg "$1" "${2:-}"; TAG="$2"; shift 2 ;;
+    --version) need_arg "$1" "${2:-}"; VERSION="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     *) die "unknown argument: $1 (use --help)" ;;
   esac
@@ -94,6 +102,9 @@ if [[ -n "$LOCAL_BIN" ]]; then
   if [[ "$DRY_RUN" -eq 1 ]]; then
     echo "would install: $LOCAL_BIN -> ${BIN_DIR}/dedup"
     exit 0
+  fi
+  if [[ ! -w "$BIN_DIR" ]] && [[ "$(id -u)" -ne 0 ]]; then
+    die "cannot write to ${BIN_DIR} (try: sudo ./install.sh ... or use --bin-dir \$HOME/.local/bin)"
   fi
   mkdir -p "$BIN_DIR"
   install -m 0755 "$LOCAL_BIN" "${BIN_DIR}/dedup"
@@ -126,6 +137,10 @@ fi
 TMPDIR="$(mktemp -d)"
 cleanup() { rm -rf "$TMPDIR"; }
 trap cleanup EXIT
+
+if [[ ! -w "$BIN_DIR" ]] && [[ "$(id -u)" -ne 0 ]]; then
+  die "cannot write to ${BIN_DIR} (try: sudo ./install.sh ... or use --bin-dir \$HOME/.local/bin)"
+fi
 
 echo "downloading: $URL"
 curl -fsSL -o "${TMPDIR}/${ASSET}" "$URL"

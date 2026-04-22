@@ -118,12 +118,6 @@ No MSI/installer is provided; Windows distribution is currently a zip containing
 See [Docs/final.md](Docs/final.md) for the full architecture, implementation
 plan and design documents.
 
-## Repo privacy notes (gitignore)
-
-This repository currently ignores:
-
-- `Docs/` — design docs are kept private for now
-- `.cursor/` — editor/agent metadata
 
 ## License
 

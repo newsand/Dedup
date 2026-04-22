@@ -1,0 +1,26 @@
+# Build output
+/bin/
+/dist/
+
+# Audit log (default location)
+/.dedup-audit/
+
+# Private docs (not public yet)
+/Docs/
+
+# Coverage
+*.out
+coverage.*
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+/tmp/

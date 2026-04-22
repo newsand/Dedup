@@ -1,0 +1,49 @@
+# Reference configuration for `dedup`.
+#
+# Flags override env which overrides this YAML which overrides built-in defaults.
+# See Docs/11-design-config.md for the full schema.
+
+roots:
+  - ./photos
+
+mode: report                # report | copy-unique | move-duplicates | delete-duplicates
+dry_run: true
+suppress_name: false
+
+output:
+  dir: ./deduped
+  preserve_timestamps: true
+
+destination:
+  dir: ./_duplicates
+
+concurrency:
+  workers: 0                 # 0 = NumCPU
+  action_workers: 0          # 0 = max(2, NumCPU/2)
+
+filters:
+  include: []
+  exclude:
+    - "**/.git/**"
+    - "**/node_modules/**"
+  ext:
+    - .png
+    - .jpg
+    - .jpeg
+    - .webp
+    - .gif
+    - .pdf
+
+canonical:
+  policy: keep-oldest        # v1.0 only supports keep-oldest
+  canonical_folder: ""
+
+logging:
+  level: info                # debug | info | warn | error
+  format: text               # text | json
+
+audit:
+  dir: ./.dedup-audit
+
+strict: false
+follow_symlinks: false

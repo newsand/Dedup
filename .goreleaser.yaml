@@ -1,0 +1,68 @@
+project_name: dedup
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: dedup
+    main: ./cmd/dedup
+    binary: dedup
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X 'deduplicator/internal/cli.Version={{.Version}}'
+      - -X 'deduplicator/internal/cli.Commit={{.Commit}}'
+      - -X 'deduplicator/internal/cli.BuildDate={{.Date}}'
+
+archives:
+  - id: default
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+      - Docs/final.md
+
+nfpms:
+  - id: deb
+    package_name: dedup
+    vendor: "Deduplicator"
+    homepage: "https://github.com/your-org/Deduplicator"
+    maintainer: "Deduplicator contributors <noreply@example.com>"
+    description: "Exact file deduplicator (BLAKE3) CLI"
+    license: MIT
+    formats:
+      - deb
+    bindir: /usr/bin
+    contents:
+      - src: Docs/final.md
+        dst: /usr/share/doc/dedup/final.md
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ .Version }}-next"
+
+changelog:
+  use: git
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"

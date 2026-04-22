@@ -1,0 +1,66 @@
+---
+description: "This rule provides standards for writing python code"
+alwaysApply: true
+---
+
+# Style Rules and Behavior
+
+## 1. Naming and Code Standards
+
+* Use **snake_case** for:
+  * variables
+  * functions and methods
+  * parameters
+  * object properties
+* Use **SCREAMING_SNAKE_CASE** for:
+  * constants
+  * environment variables
+* Use **PascalCase** for:
+  * classes
+* Prefix parameters with `p_`:
+  * example: `p_user`, `p_value`
+
+## 2. Function and Method Naming
+
+* Use **clear, descriptive English names**
+  * Exception: domain-specific foreign terms already used in the system
+* Functions and methods must:
+  * express **intent clearly**
+  * use **verbs** (action-oriented)
+* Boolean methods should read as questions:
+  * `is_valid()`
+  * `is_number(field)`
+* Avoid:
+  * abbreviations
+  * unnecessary acronyms
+  * shortened words
+* Allowed acronyms (well-known only):
+  * `ID`, `CPF`, `CNPJ`, `BR`, `USA`
+* If a name becomes too long:
+  * do **not** abbreviate
+  * choose a simpler, clearer term instead
+
+## 3. Testing Conventions
+
+* Test names must include the target function:
+  * `test_is_valid`
+  * `test_create_data`
+* Tests must describe expected behavior:
+  * example: "should return X, returned Y"
+
+## 4. General Rules
+
+* Always keep a **blank line at the end of every file**
+
+## 5. Data Standards
+
+* All API calls must use **JSON** as the data format
+* All data passed to LLMs must be formatted as **TOONs**
+  * no exceptions
+
+## 6. Anti-patterns
+
+- Do NOT use camelCase
+- Do NOT abbreviate variable names
+- Do NOT mix languages in identifiers
+- Do NOT return non-JSON from APIs

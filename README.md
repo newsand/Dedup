@@ -54,6 +54,34 @@ make build
 
 Choose one of the options below.
 
+### Install using `install.sh` (recommended)
+
+From a **local build**:
+
+```bash
+make build
+chmod +x install.sh
+sudo ./install.sh --local ./bin/dedup
+dedup version
+```
+
+Without `sudo` (installs for the current user):
+
+```bash
+make build
+chmod +x install.sh
+./install.sh --local ./bin/dedup --bin-dir "$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
+dedup version
+```
+
+From a **GitHub Release** (downloads the correct `linux/amd64` or `linux/arm64` bundle):
+
+```bash
+chmod +x install.sh
+sudo ./install.sh --repo your-org/Deduplicator --tag v1.0.0
+```
+
 ### Install from a `.tar.gz` bundle
 
 ```bash
@@ -89,6 +117,13 @@ No MSI/installer is provided; Windows distribution is currently a zip containing
 
 See [Docs/final.md](Docs/final.md) for the full architecture, implementation
 plan and design documents.
+
+## Repo privacy notes (gitignore)
+
+This repository currently ignores:
+
+- `Docs/` — design docs are kept private for now
+- `.cursor/` — editor/agent metadata
 
 ## License
 

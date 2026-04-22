@@ -1,0 +1,7 @@
+{
+  "name": "dedup",
+  "version": "1.0.0",
+  "description": "Use the Deduplicator CLI (BLAKE3 exact duplicates) from Cursor via a skill.",
+  "skills": ["skills/dedup/SKILL.md"]
+}
+

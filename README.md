@@ -37,6 +37,36 @@ dedup move-duplicates ./photos --dest ./quarantine --dry-run=false
 dedup delete-duplicates ./photos --yes --dry-run=false
 ```
 
+## How to actually generate a “deduplicated folder”
+
+`dedup` has **two kinds of commands**:
+
+- **Report-only** (no filesystem changes): `scan`, `report`
+- **Action commands** (create/move/delete files): `copy-unique`, `move-duplicates`, `delete-duplicates`
+
+If what you want is a new directory containing the deduplicated result, use **`copy-unique`**:
+
+```bash
+# 1) Preview exactly what would be copied (default is dry-run)
+dedup copy-unique ./photos --out ./deduped
+
+# 2) Actually create/populate the output directory
+dedup copy-unique ./photos --out ./deduped --dry-run=false
+```
+
+What you get in `--out`:
+
+- **Uniq files** (files that have no duplicates)
+- **Canonicals** (one chosen representative for each duplicate group)
+- All written into a **single flattened directory** with normalized names (snake_case) + deterministic suffixes on collisions
+
+If instead you want to keep the originals “as-is” and just move the extra copies away, use **`move-duplicates`** (quarantine):
+
+```bash
+dedup move-duplicates ./photos --dest ./quarantine
+dedup move-duplicates ./photos --dest ./quarantine --dry-run=false
+```
+
 ## Usage
 
 All commands take one or more **roots**. To use the current directory as root, pass `.`:
